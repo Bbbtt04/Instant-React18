@@ -3,7 +3,7 @@ import { Button, Form, Input, notification } from 'antd'
 import styled from 'styled-components'
 import background from '../public/image/background.png'
 import request from '../utils/request';
-import { TOKEN_KEY } from '../utils/contents';
+import { NAME_KEY, TOKEN_KEY } from '../utils/contents';
 import { useRouter } from 'next/router';
 import { io } from 'socket.io-client';
 
@@ -20,10 +20,12 @@ export default function Home() {
     const login = (username: string, password: string) => {
         request.post('/auth/login', {
             username,
-            password
+            password,
+            avatar: `https://api.multiavatar.com/Binx%${Math.floor((Math.random() * 50000))}`
         }).then((res: any) => {
             if (res?.data?.access_token) {
                 localStorage.setItem(TOKEN_KEY, res.data.access_token)
+                localStorage.setItem(NAME_KEY, username)
                 notification.success({
                     message: '登录成功！'
                 })
@@ -48,55 +50,56 @@ export default function Home() {
         login(values.username, values.password)
     }
 
-    return (<Container>
-        <img className='background' src={background.src} />
-        <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            autoComplete="off"
-            className='form'
-        >
-            <Form.Item
-                label="输入用户名："
-                name="username"
-                className='form-item'
-                rules={[{ required: true, message: '请输入用户名' }]}
+    return (
+        <Container>
+            <img className='background' src={background.src} />
+            <Form
+                name="basic"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                autoComplete="off"
+                className='form'
             >
-                <Input />
-            </Form.Item>
+                <Form.Item
+                    label="输入用户名："
+                    name="username"
+                    className='form-item'
+                    rules={[{ required: true, message: '请输入用户名' }]}
+                >
+                    <Input />
+                </Form.Item>
 
-            <Form.Item
-                label="请输入密码："
-                name="password"
-                className='form-item'
-                rules={[{ required: true, message: '请输入密码' }]}
-            >
-                <Input.Password />
-            </Form.Item>
+                <Form.Item
+                    label="请输入密码："
+                    name="password"
+                    className='form-item'
+                    rules={[{ required: true, message: '请输入密码' }]}
+                >
+                    <Input.Password />
+                </Form.Item>
 
-            <Form.Item
-                label="请确认密码："
-                name="confirmedPassword"
-                className='form-item'
-                rules={[{ required: true, message: '请确认密码' }]}
-            >
-                <Input.Password></Input.Password>
-            </Form.Item>
+                <Form.Item
+                    label="请确认密码："
+                    name="confirmedPassword"
+                    className='form-item'
+                    rules={[{ required: true, message: '请确认密码' }]}
+                >
+                    <Input.Password></Input.Password>
+                </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit" className='submit-btn'>
-                    登录
-                </Button>
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit" className='submit-btn'>
+                        登录
+                    </Button>
 
-            </Form.Item>
-            <p>
-                新用户未注册会自动注册并登录
-            </p>
-        </Form>
-    </Container>)
+                </Form.Item>
+                <p>
+                    新用户未注册会自动注册并登录
+                </p>
+            </Form>
+        </Container>)
 }
 
 const Container = styled.div`
