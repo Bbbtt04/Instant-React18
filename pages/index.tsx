@@ -1,16 +1,15 @@
 import React from 'react'
 import { Button, Form, Input, notification } from 'antd'
-import 'antd/dist/reset.css';
 import styled from 'styled-components'
 import background from '../public/image/background.png'
-import request from '@/utils/request';
-import { TOKEN_KEY } from '@/utils/contents';
+import request from '../utils/request';
+import { TOKEN_KEY } from '../utils/contents';
 import { useRouter } from 'next/router';
 import { io } from 'socket.io-client';
 
 export default function Home() {
     const router = useRouter()
-    const socket = io('http://localhost:80')
+    const socket = io('http://localhost:2999')
 
     interface FormData {
         username: string,
@@ -22,7 +21,7 @@ export default function Home() {
         request.post('/auth/login', {
             username,
             password
-        }).then(res => {
+        }).then((res: any) => {
             if (res?.data?.access_token) {
                 localStorage.setItem(TOKEN_KEY, res.data.access_token)
                 notification.success({
@@ -33,7 +32,7 @@ export default function Home() {
                 }, (data: any) => {
                     console.log(data);
                 })
-                // router.push('/chat')
+                router.push('/chat')
             }
         })
     }
