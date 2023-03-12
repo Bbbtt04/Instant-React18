@@ -1,16 +1,18 @@
 import UserList from "@/components/UserList"
 import { changeName } from "@/store"
 import { NAME_KEY } from "@/utils/contents"
+import request from "@/utils/request"
 import { routerBeforeEach } from "@/utils/router-beforeEah"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { io } from "socket.io-client"
 import styled from "styled-components"
 
 function Chat() {
   const socket = io('http://localhost:2999')
   const router = useRouter()
+  const myName = useSelector((state: any) => state.username.value)
   const dispatch = useDispatch()
   const [currentUser, setCurrentUser] = useState('')
   const [messages, setMessages] = useState([{
@@ -18,6 +20,23 @@ function Chat() {
     receiver: "",
     content: ""
   }])
+
+  function getMessageList() {
+    request({
+      url: '/message/list',
+      method: "post",
+      data: {
+        sender: myName,
+        receiver: currentUser
+      }
+    }).then(res => {
+      setMessages(res.data)
+    })
+  }
+
+  useEffect(() => {
+    getMessageList()
+  }, [currentUser])
 
   useEffect(() => {
     routerBeforeEach(router)
