@@ -1,4 +1,5 @@
 import UserList from "@/components/UserList"
+import Content from "@/components/Content"
 import { changeName } from "@/store"
 import { NAME_KEY } from "@/utils/contents"
 import request from "@/utils/request"
@@ -35,6 +36,13 @@ function Chat() {
   }
 
   useEffect(() => {
+    socket.on('showMessage', getMessageList)
+    return () => {
+      socket.off('showMessage')
+    }
+  })
+
+  useEffect(() => {
     getMessageList()
   }, [currentUser])
 
@@ -52,6 +60,12 @@ function Chat() {
           messages={messages}
           setMessages={setMessages}
         ></UserList>
+        <Content
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          messages={messages}
+          setMessages={setMessages}
+        ></Content>
       </ChatScreen>
     </Container>
   )
@@ -74,6 +88,7 @@ const ChatScreen = styled.div`
   height: 80vh;
   border-radius: 15px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+  display: flex;
 `
 
 export default Chat

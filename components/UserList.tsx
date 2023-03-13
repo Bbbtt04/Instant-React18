@@ -64,9 +64,7 @@ export default function UserList({
                 <div className="right">
                   <span className="name">{user.username}</span>
                   <span className="message">
-                    回复的信息1111111111111111111
-                    回复的信息1111111111111111111
-                    回复的信息1111111111111111111
+                    发送一条信息吧
                   </span>
                 </div>
               </div>
