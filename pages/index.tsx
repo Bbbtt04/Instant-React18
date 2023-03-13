@@ -21,7 +21,6 @@ export default function Home() {
         request.post('/auth/login', {
             username,
             password,
-            avatar: `https://api.multiavatar.com/Binx%${Math.floor((Math.random() * 50000))}`
         }).then((res: any) => {
             if (res?.data?.access_token) {
                 localStorage.setItem(TOKEN_KEY, res.data.access_token)
