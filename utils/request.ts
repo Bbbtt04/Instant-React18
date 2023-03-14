@@ -10,7 +10,6 @@ const request = axios.create({
 request.interceptors.request.use((request:any) => {
   if(localStorage.getItem(TOKEN_KEY))
     request.headers.Authorization = `Bearer ${localStorage.getItem(TOKEN_KEY)}`;
-
   return request
 })
 

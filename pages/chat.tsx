@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { io } from "socket.io-client"
 import styled from "styled-components"
+import { Button } from "antd"
 
 function Chat() {
   const socket = io('http://localhost:2999')
@@ -51,8 +52,15 @@ function Chat() {
     dispatch(changeName(localStorage.getItem(NAME_KEY) || ''))
   }, [])
 
+  function changeAvatar() {
+    router.push('/avatar')
+  }
+
   return (
     <Container>
+      <div className="header">
+        <Button type="dashed" onClick={() => { changeAvatar() }}>更换头像</Button>
+      </div>
       <ChatScreen>
         <UserList
           currentUser={currentUser}
@@ -81,6 +89,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  .header {
+    position: fixed;
+    top: 1rem;
+    left: 5rem;
+  }
 `
 
 const ChatScreen = styled.div`
